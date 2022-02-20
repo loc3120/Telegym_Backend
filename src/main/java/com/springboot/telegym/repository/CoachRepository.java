@@ -14,6 +14,6 @@ public interface CoachRepository extends JpaRepository<Coach, String> {
 
     Optional<Coach> findByEmail(String email);
 
-    @Query("select c from Coach c where lower(c.typeExercise.typename) in :typeCoach")
+    @Query("select c from Coach c where lower(c.name) in :typeCoach")
     Page<Coach> printAllCoach(Pageable pageable, @Param("typeCoach") List<String> typeCoach);
 }

@@ -1,11 +1,9 @@
 package com.springboot.telegym.dto;
 
 import com.springboot.telegym.entity.Coach;
-import com.springboot.telegym.entity.PackageEntity;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +24,6 @@ public class CoachDto extends BaseDto{
 
     private String description;
 
-    List<PackageEntity> packageEntityCoachList;
-
     public CoachDto(Coach coach) {
         super(coach);
         this.id = coach.getId();
@@ -36,7 +32,6 @@ public class CoachDto extends BaseDto{
         this.email = coach.getEmail();
         this.phone_number = coach.getPhone_number();
         this.description = coach.getDescription();
-        this.packageEntityCoachList = coach.getPackageEntityCoachList();
         this.setCreated_time(coach.getCreated_time());
         this.setCreated_by(coach.getCreated_by());
         this.setUpdated_time(coach.getUpdated_time());

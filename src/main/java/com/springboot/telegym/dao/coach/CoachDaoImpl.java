@@ -50,7 +50,6 @@ public class CoachDaoImpl implements CoachDao {
                 updatedCoach.setDateOfBirth(coachDto.getDateOfBirth());
                 updatedCoach.setEmail(coachDto.getEmail());
                 updatedCoach.setPhone_number(coachDto.getPhone_number());
-                updatedCoach.setPackageEntityCoachList(coachDto.getPackageEntityCoachList());
                 updatedCoach.setUpdated_time(new Date());
                 updatedCoach.setUpdated_by(userDetails.getId());
                 coachRepository.save(updatedCoach);
@@ -79,7 +78,6 @@ public class CoachDaoImpl implements CoachDao {
                 newCoach.setEmail(coachDto.getEmail());
                 newCoach.setPhone_number(coachDto.getPhone_number());
                 newCoach.setDescription(coachDto.getDescription());
-                newCoach.setPackageEntityCoachList(coachDto.getPackageEntityCoachList());
                 newCoach.setCreated_time(new Date());
                 newCoach.setUpdated_time(new Date());
                 newCoach.setCreated_by(userDetails.getId());

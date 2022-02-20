@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -22,8 +22,15 @@ public class Customer extends BaseEntity{
 
     private String email;
 
-    @ManyToMany
-    @JoinTable(name = "Customer_Package", joinColumns = @JoinColumn(name = "id_customer"),
-            inverseJoinColumns = @JoinColumn(name = "id_package"))
-    private List<PackageEntity> packageEntityCustomerList;
+    private Date time_enroll;
+
+    private Date time_expire;
+
+    private boolean is_expire;
+
+    private String exercise_form;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_card")
+    private MembershipCard membershipCard;
 }

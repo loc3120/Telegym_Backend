@@ -12,11 +12,19 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "typeexercise")
-public class TypeExercise extends BaseEntity {
+@Table(name = "membershipcard")
+public class MembershipCard {
 
     @Id
     private String id;
 
-    private String typename;
+    private String cardname;
+
+    private int level_card;
+
+    private String description;
+
+    private long minprice;
+
+    private boolean is_deleted;
 }

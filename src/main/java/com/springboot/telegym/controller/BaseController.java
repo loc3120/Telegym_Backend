@@ -2,10 +2,8 @@ package com.springboot.telegym.controller;
 
 import com.springboot.telegym.service.candidate.CandidateService;
 import com.springboot.telegym.service.coach.CoachService;
-import com.springboot.telegym.service.packageFolder.PackageService;
 import com.springboot.telegym.service.role.RoleService;
 import com.springboot.telegym.service.tryingPractice.TryingPracticeService;
-import com.springboot.telegym.service.typeExercise.TypeExerciseService;
 import com.springboot.telegym.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +25,4 @@ public abstract class BaseController {
 
     @Autowired
     CoachService coachService;
-
-    @Autowired
-    PackageService packageService;
-
-    @Autowired
-    TypeExerciseService typeExerciseService;
 }

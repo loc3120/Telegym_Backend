@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
@@ -27,13 +28,4 @@ public class Coach extends BaseEntity {
     private String phone_number;
 
     private String description;
-
-    @ManyToMany
-    @JoinTable(name = "Coach_Package", joinColumns = @JoinColumn(name = "id_coach"),
-    inverseJoinColumns = @JoinColumn(name = "id_package"))
-    private List<PackageEntity> packageEntityCoachList;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_type")
-    private TypeExercise typeExercise;
 }

@@ -1,10 +1,9 @@
 package com.springboot.telegym.dto;
 
 import com.springboot.telegym.entity.Customer;
-import com.springboot.telegym.entity.PackageEntity;
 import lombok.*;
 
-import java.util.Set;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,7 +20,15 @@ public class CustomerDto extends BaseDto {
 
     String email;
 
-    Set<PackageEntity> packageEntityCustomerSet;
+    Date time_enroll;
+
+    Date time_expire;
+
+    boolean is_expire;
+
+    private String exercise_form;
+
+    String membershipCard;
 
     public CustomerDto(Customer customer) {
         super(customer);
@@ -29,7 +36,11 @@ public class CustomerDto extends BaseDto {
         this.name = customer.getName();
         this.phone_number = customer.getPhone_number();
         this.email = customer.getEmail();
-//        this.packageEntityCustomerSet = customer.getPackageEntityCustomerSet();
+        this.time_enroll = customer.getTime_enroll();
+        this.time_expire = customer.getTime_expire();
+        this.is_expire = customer.is_expire();
+        this.exercise_form = customer.getExercise_form();
+        this.membershipCard = customer.getMembershipCard().getCardname();
         this.setCreated_time(customer.getCreated_time());
         this.setCreated_by(customer.getCreated_by());
         this.setUpdated_time(customer.getUpdated_time());
