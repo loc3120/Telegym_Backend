@@ -8,7 +8,7 @@ public interface TryingPracticeDao {
 
     PageData<TryingPracticeDto> getAllTP(Pageable pageable, String search);
 
-    void createTP(TryingPracticeDto tryingPracticeDto);
+    int createTP(TryingPracticeDto tryingPracticeDto);
 
-    void contactCustomer(String id);
+    String contactCustomer(String id, boolean is_contacted);
 }

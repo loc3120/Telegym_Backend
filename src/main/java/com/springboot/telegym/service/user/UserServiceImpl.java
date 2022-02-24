@@ -37,18 +37,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findByUsername(String Username) {
-        return userDao.findByUsername(Username);
-    }
-
-    @Override
-    public boolean existById(String id) {
-        return userDao.existById(id);
-    }
-
-    @Override
-    public void deleteById(String id) {
-        userDao.deleteById(id);
+    public int deleteById(String id) {
+        return userDao.deleteById(id);
     }
 
     @Override

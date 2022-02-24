@@ -8,7 +8,7 @@ public interface CandidateDao {
 
     PageData<CandidateDto> getAllCandidate(Pageable pageable, String search);
 
-    void createCandidate(CandidateDto candidateDto);
+    int createCandidate(CandidateDto candidateDto);
 
-    void candidateReview(String id, Boolean approvalValue);
+    String candidateReview(String id, Boolean approvalValue);
 }

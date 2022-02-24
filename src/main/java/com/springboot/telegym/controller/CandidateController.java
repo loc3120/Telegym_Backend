@@ -25,7 +25,7 @@ public class CandidateController extends BaseController {
     public ResponseEntity<ResponseObject> getAllCandidate(StructurePageRequest structurePageRequest, String search) {
         PageData<CandidateDto> pageAllCandidates =
                 candidateService.getAllCandidate(structurePageRequest, search);
-        return pageAllCandidates != null ?
+        return pageAllCandidates.getData() != null ?
                 ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
                         "Ok", "Truy vấn thành công", pageAllCandidates)) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
@@ -33,12 +33,17 @@ public class CandidateController extends BaseController {
     }
 
     @PostMapping("/create")
-    public void createCandidate(@Valid @RequestBody CandidateDto candidateDto) {
-        candidateService.createCandidate(candidateDto);
+    public ResponseEntity<ResponseObject> createCandidate(@Valid @RequestBody CandidateDto candidateDto) {
+        int lineSuccess = candidateService.createCandidate(candidateDto);
+        return lineSuccess > 0 ?
+                ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                        "Ok", "Gửi ứng tuyển thành công", "")) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
+                        "Failed", "Gửi ứng tuyển thất bại", ""));
     }
 
-    @PostMapping("/review/{id}")
-    public void candidateReview(@PathVariable("id") String id, @RequestBody SearchObject searchObject) {
-        candidateService.candidateReview(id, searchObject.isBl1());
+    @PostMapping(value = "/review/{id}")
+    public String candidateReview(@PathVariable("id") String id, @RequestBody SearchObject searchObject) {
+        return candidateService.candidateReview(id, searchObject.isBl1());
     }
 }

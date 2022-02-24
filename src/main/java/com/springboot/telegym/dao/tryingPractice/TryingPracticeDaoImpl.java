@@ -1,27 +1,22 @@
 package com.springboot.telegym.dao.tryingPractice;
 
+import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.TryingPracticeDto;
 import com.springboot.telegym.entity.TryingPractice;
-import com.springboot.telegym.mapper.MapperDtoAndEntity;
 import com.springboot.telegym.repository.TryingPracticeRepository;
 import com.springboot.telegym.security.SecurityUser;
 import com.springboot.telegym.security.UserDetailsImpl;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.StoredProcedureQuery;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Transactional
 @Component
@@ -38,71 +33,68 @@ public class TryingPracticeDaoImpl implements TryingPracticeDao {
 
     @Override
     public PageData<TryingPracticeDto> getAllTP(Pageable pageable, String search) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<TryingPractice> cq = cb.createQuery(TryingPractice.class);
-        Root<TryingPractice> tpRoot = cq.from(TryingPractice.class);
-        List<Predicate> predicates = new ArrayList<>();
+        StoredProcedureQuery query =
+                entityManager.createStoredProcedureQuery("Select_TP", TryingPractice.class);
 
-        predicates.add(cb.isNull(tpRoot.get("reply_by")));
-        predicates.add(cb.or(cb.like(cb.lower(tpRoot.get("name")), search),
-                cb.like(cb.lower(tpRoot.get("email")), search)));
-        cq.select(tpRoot).where(predicates.toArray(new Predicate[0]));
+        query.registerStoredProcedureParameter("Search", String.class, ParameterMode.IN);
+        query.setParameter("Search", search);
+        query.execute();
 
-        Query queryCount = entityManager.createQuery(cq);
-        TypedQuery<TryingPractice> query = entityManager.createQuery(cq);
+        PagedListHolder<TryingPractice> tryingPracticePage = new PagedListHolder<>((List<TryingPractice>) query.getResultList());
+        tryingPracticePage.setPage(pageable.getPageNumber());
+        tryingPracticePage.setPageSize(pageable.getPageSize());
+        List<TryingPracticeDto> tryingPracticeDtoList = new ArrayList<>();
 
-
-        query.setFirstResult(pageable.getPageSize() * pageable.getPageNumber()); // Bắt đầu từ trang 0
-
-        query.setMaxResults(pageable.getPageSize());
-        AtomicLong totalElements = new AtomicLong();
-        try {
-            totalElements.set(queryCount.getResultList().size());
-        } catch (Exception e) {
-            totalElements.set(0);
-            e.printStackTrace();
+        for (TryingPractice tp : tryingPracticePage.getPageList()) {
+            tryingPracticeDtoList.add(convertToTryingPracticeDto(tp));
         }
 
-        List<TryingPractice> tps = query.getResultList();
-        List<TryingPracticeDto> tpDtoList = new ArrayList<>();
-
-        if (tps.size() > 0) {
-            for (TryingPractice c : tps) {
-                tpDtoList.add(convertToTryingPracticeDto(c));
-            }
-        }
-
-        AtomicInteger totalPages = new AtomicInteger();
-        if (totalElements.get() > 0) {
-            totalPages.set((int) (totalElements.get() % pageable.getPageSize() == 0 ?
-                    totalElements.get() / pageable.getPageSize() :
-                    totalElements.get() / pageable.getPageSize() + 1));
-        }
-
-        boolean hasNext = pageable.getPageNumber() < totalPages.get() - 1;
-        return new PageData<>(tpDtoList, totalPages.get(), totalElements.get(), hasNext);
+        return new PageData<>(tryingPracticeDtoList, tryingPracticePage.getPageCount(),
+                tryingPracticePage.getNrOfElements(), tryingPracticePage.isLastPage());
     }
 
     @Override
-    public void createTP(TryingPracticeDto tryingPracticeDto) {
-        tryingPracticeDto.setId(UUID.randomUUID().toString());
-        tryingPracticeDto.setTime_sent(new Date());
+    public int createTP(TryingPracticeDto tryingPracticeDto) {
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Create_TP");
 
-        entityManager.persist(new MapperDtoAndEntity().convertToEntity(tryingPracticeDto));
+        query.registerStoredProcedureParameter("id", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("name", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("phone_number", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("email", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("is_contacted", Boolean.class, ParameterMode.IN);
+
+        query.setParameter("id", UUID.randomUUID().toString());
+        query.setParameter("name", tryingPracticeDto.getName());
+        query.setParameter("phone_number", tryingPracticeDto.getPhone_number());
+        query.setParameter("email", tryingPracticeDto.getEmail());
+        query.setParameter("is_contacted", false);
+
+        query.execute();
+
+        return query.getUpdateCount();
     }
 
     @Override
-    public void contactCustomer(String id) {
-        Optional<TryingPractice> tpEntity = tryingPracticeRepository.findById(id);
+    public String contactCustomer(String id, boolean is_contacted) {
         UserDetailsImpl userDetails = SecurityUser.identifyCurrentUser();
 
-        if(tpEntity.isPresent()) {
-            tpEntity.get().set_contacted(true);
-            assert userDetails != null;
-            tpEntity.get().setReply_by(userDetails.getId());
-            tpEntity.get().setTime_reply(new Date());
-            entityManager.persist(tpEntity.get());
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Contact_Customer");
+
+        query.registerStoredProcedureParameter("id", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("reply_by", String.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("is_contacted", Boolean.class, ParameterMode.IN);
+
+        query.setParameter("id", id);
+        assert userDetails != null;
+        query.setParameter("reply_by", userDetails.getId());
+        query.setParameter("is_contacted", true);
+
+        query.execute();
+
+        if(query.getUpdateCount() > 0) {
+            return MessageResponse.message = "Liên hệ thành công";
         }
+        return MessageResponse.message = "Liên hệ thất bại";
     }
 
     private TryingPracticeDto convertToTryingPracticeDto(TryingPractice t) {

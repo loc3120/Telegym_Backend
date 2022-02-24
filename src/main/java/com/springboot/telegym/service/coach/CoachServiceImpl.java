@@ -11,9 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
 @Service
 @Transactional
@@ -28,17 +25,9 @@ public class CoachServiceImpl implements CoachService {
     }
 
     @Override
-    public PageData<CoachDto> getAllCoach(StructurePageRequest structurePageRequest, String typeCoach) {
+    public PageData<CoachDto> getAllCoach(StructurePageRequest structurePageRequest) {
         Pageable pageable = PageUtils.getPageable(structurePageRequest);
-        List<String> typeList = new ArrayList<>();
-        if (typeCoach == null || typeCoach.isBlank() || typeCoach.isEmpty()) {
-            typeList.add("YOGA");
-            typeList.add("GYM");
-        }
-        else {
-            typeList.add(typeCoach);
-        }
 
-        return coachDao.getAllCoach(pageable, typeList);
+        return coachDao.getAllCoach(pageable);
     }
 }

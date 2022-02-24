@@ -8,17 +8,11 @@ import com.springboot.telegym.request.UserFilterRequest;
 
 public interface UserService {
 
-//    Page<UserDto> getPage(StructurePageRequest structurePageRequest);
-
     UserDto createOrUpdate(UserDto userDto);
 
     UserDto getById(String id);
 
-    UserDto findByUsername(String username);
-
-    boolean existById(String id);
-
-    void deleteById(String id);
+    int deleteById(String id);
 
     UserDto login(SearchObject searchObject);
 

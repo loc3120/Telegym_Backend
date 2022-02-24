@@ -27,12 +27,12 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public void createCandidate(CandidateDto candidateDto) {
-        candidateDao.createCandidate(candidateDto);
+    public int createCandidate(CandidateDto candidateDto) {
+        return candidateDao.createCandidate(candidateDto);
     }
 
     @Override
-    public void candidateReview(String id, Boolean approvalValue) {
-        candidateDao.candidateReview(id, approvalValue);
+    public String candidateReview(String id, Boolean approvalValue) {
+        return candidateDao.candidateReview(id, approvalValue);
     }
 }

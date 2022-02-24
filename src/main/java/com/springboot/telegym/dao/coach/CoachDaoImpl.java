@@ -7,12 +7,14 @@ import com.springboot.telegym.entity.Coach;
 import com.springboot.telegym.repository.CoachRepository;
 import com.springboot.telegym.security.SecurityUser;
 import com.springboot.telegym.security.UserDetailsImpl;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Transactional
 @Component
@@ -25,15 +27,17 @@ public class CoachDaoImpl implements CoachDao {
     }
 
     @Override
-    public PageData<CoachDto> getAllCoach(Pageable pageable, List<String> typeCoach) {
-        Page<Coach> coachPage = coachRepository.printAllCoach(pageable, typeCoach);
+    public PageData<CoachDto> getAllCoach(Pageable pageable) {
+        List<Coach> coachList = coachRepository.selectCoach();
 
+        PagedListHolder<Coach> coachPage = new PagedListHolder<>(coachList);
+        coachPage.setPage(pageable.getPageNumber());
+        coachPage.setPageSize(pageable.getPageSize());
         List<CoachDto> coachDtoList = new ArrayList<>();
-        for (Coach c : coachPage.getContent()) {
-            coachDtoList.add(convertToCoachDto(c));
+        for (Coach data : coachPage.getPageList()) {
+            coachDtoList.add(convertToCoachDto(data));
         }
-        return new PageData<>(coachDtoList, coachPage.getTotalPages(),
-                coachPage.getTotalElements(), coachPage.hasNext());
+        return new PageData<>(coachDtoList, coachPage.getPageCount(), coachPage.getNrOfElements(), coachPage.isLastPage());
     }
 
     @Override
@@ -42,21 +46,15 @@ public class CoachDaoImpl implements CoachDao {
         UserDetailsImpl userDetails = SecurityUser.identifyCurrentUser();
 
         if (coachDto.getId() != null && userDetails != null) {
-            Optional<Coach> addingCoach = coachRepository.findById(coachDto.getId());
-            if (addingCoach.isPresent()) {
-                Coach updatedCoach;
-                updatedCoach = addingCoach.get();
-                updatedCoach.setName(coachDto.getName());
-                updatedCoach.setDateOfBirth(coachDto.getDateOfBirth());
-                updatedCoach.setEmail(coachDto.getEmail());
-                updatedCoach.setPhone_number(coachDto.getPhone_number());
-                updatedCoach.setUpdated_time(new Date());
-                updatedCoach.setUpdated_by(userDetails.getId());
-                coachRepository.save(updatedCoach);
+            Coach updatedCoach = coachRepository.updateCoach(coachDto.getId(), coachDto.getName(),
+                    coachDto.getDateOfBirth(), coachDto.getEmail(), coachDto.getPhone_number(),
+                    coachDto.getDescription(), userDetails.getId());
+            if(updatedCoach != null) {
+                MessageResponse.message = "Update thành công";
                 return new CoachDto(updatedCoach);
             }
             else {
-                MessageResponse.message = "Không tìm thấy đối tượng hoặc không xác định người dùng";
+                MessageResponse.message = "Update thất bại";
                 return null;
             }
         }
@@ -65,39 +63,28 @@ public class CoachDaoImpl implements CoachDao {
             return null;
         }
         else {
-            CoachDto checkEmailExist = findByEmail(coachDto.getEmail());
-            if (checkEmailExist != null) {
-                MessageResponse.message = "Tên email trùng";
-                return null;
-            }
-            else {
-                Coach newCoach = new Coach();
-                newCoach.setId(UUID.randomUUID().toString());
-                newCoach.setName(coachDto.getName());
-                newCoach.setDateOfBirth(coachDto.getDateOfBirth());
-                newCoach.setEmail(coachDto.getEmail());
-                newCoach.setPhone_number(coachDto.getPhone_number());
-                newCoach.setDescription(coachDto.getDescription());
-                newCoach.setCreated_time(new Date());
-                newCoach.setUpdated_time(new Date());
-                newCoach.setCreated_by(userDetails.getId());
-                newCoach.setUpdated_by(userDetails.getId());
-                coachRepository.save(newCoach);
+            Coach newCoach = coachRepository.createCoach(UUID.randomUUID().toString(), coachDto.getName(),
+                    coachDto.getDateOfBirth(), coachDto.getEmail(), coachDto.getPhone_number(),
+                    coachDto.getDescription(), userDetails.getId(), userDetails.getId());
+            if (newCoach != null) {
+                MessageResponse.message = "Thêm HLV thành công";
                 return new CoachDto(newCoach);
             }
+            MessageResponse.message = "Thêm HLV thất bại";
+            return null;
         }
     }
 
-    @Override
-    public CoachDto findByEmail(String email) {
-        Coach coach;
-        Optional<Coach> coachEntity = coachRepository.findByEmail(email);
-        if (coachEntity.isPresent()) {
-            coach = coachEntity.get();
-            return new CoachDto(coach);
-        }
-        return null;
-    }
+//    @Override
+//    public CoachDto findByEmail(String email) {
+//        Coach coach;
+//        Optional<Coach> coachEntity = coachRepository.findByEmail(email);
+//        if (coachEntity.isPresent()) {
+//            coach = coachEntity.get();
+//            return new CoachDto(coach);
+//        }
+//        return null;
+//    }
 
     private CoachDto convertToCoachDto(Coach coach) {
         return CoachDto.builder()

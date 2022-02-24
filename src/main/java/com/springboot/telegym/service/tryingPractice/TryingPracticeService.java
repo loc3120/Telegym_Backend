@@ -8,7 +8,7 @@ public interface TryingPracticeService {
 
     PageData<TryingPracticeDto> getAllTP(StructurePageRequest structurePageRequest, String search);
 
-    void createTP(TryingPracticeDto tryingPracticeDto);
+    int createTP(TryingPracticeDto tryingPracticeDto);
 
-    void contactCustomer(String id);
+    String contactCustomer(String id, boolean is_contacted);
 }

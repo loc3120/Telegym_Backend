@@ -8,7 +8,7 @@ public interface CandidateService {
 
     PageData<CandidateDto> getAllCandidate(StructurePageRequest structurePageRequest, String search);
 
-    void createCandidate(CandidateDto candidateDto);
+    int createCandidate(CandidateDto candidateDto);
 
-    void candidateReview(String id, Boolean approvalValue);
+    String candidateReview(String id, Boolean approvalValue);
 }

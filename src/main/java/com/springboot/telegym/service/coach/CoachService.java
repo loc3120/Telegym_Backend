@@ -8,5 +8,5 @@ public interface CoachService {
 
     CoachDto createOrUpdate(CoachDto coachDto);
 
-    PageData<CoachDto> getAllCoach(StructurePageRequest pageRequest, String typeCoach);
+    PageData<CoachDto> getAllCoach(StructurePageRequest pageRequest);
 }

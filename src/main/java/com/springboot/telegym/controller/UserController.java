@@ -42,7 +42,7 @@ public class UserController extends BaseController {
         UserDto modifiedUser = userService.createOrUpdate(userDto);
         return modifiedUser != null ?
                 ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
-                        "Ok", "Thay đổi thông tin thành công", modifiedUser)) :
+                        "Ok", MessageResponse.message, modifiedUser)) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(
                         "Failed", MessageResponse.message, ""));
     }
@@ -50,15 +50,11 @@ public class UserController extends BaseController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseObject> delete(@PathVariable String id) {
-        boolean existed = userService.existById(id);
-        if (existed) {
-            userService.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
-                    "Ok", "Xoá tài khoản thành công", ""));
-        }
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
-                    "Failed", "Không tìm thấy tài khoản", ""));
+        int lineSuccess = userService.deleteById(id);
+        return lineSuccess > 0 ? ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                "Ok", MessageResponse.message, "")) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
+                        "Failed", MessageResponse.message, ""));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

@@ -24,17 +24,16 @@ public class CoachController extends BaseController {
     }
 
     @GetMapping("/getall")
-    public ResponseEntity<ResponseObject> getAllCoach(StructurePageRequest structurePageRequest,
-                                                      @RequestParam("typecoach") String typeCoach) {
+    public ResponseEntity<ResponseObject> getAllCoach(StructurePageRequest structurePageRequest) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
-                    "Ok", "Tìm kiếm thành công",
-                    coachService.getAllCoach(structurePageRequest, typeCoach)));
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("Ok", "Tìm kiếm thành công",
+                            coachService.getAllCoach(structurePageRequest)));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
-                "Failed", MessageResponse.message, ""));
+                "Failed", "Danh sách HLV trống", ""));
     }
 
     @PostMapping("/modify")
@@ -42,7 +41,7 @@ public class CoachController extends BaseController {
         CoachDto modifiedCoach = coachService.createOrUpdate(coachDto);
         return modifiedCoach != null ?
                 ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
-                        "Ok", "Thông tin tài khoản", modifiedCoach)) :
+                        "Ok", MessageResponse.message, modifiedCoach)) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(
                         "Failed", MessageResponse.message, ""));
     }

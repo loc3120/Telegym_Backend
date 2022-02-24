@@ -3,6 +3,7 @@ package com.springboot.telegym.controller;
 import com.springboot.telegym.common.Constant;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.common.ResponseObject;
+import com.springboot.telegym.common.SearchObject;
 import com.springboot.telegym.dto.TryingPracticeDto;
 import com.springboot.telegym.request.StructurePageRequest;
 import com.springboot.telegym.service.tryingPractice.TryingPracticeService;
@@ -35,12 +36,17 @@ public class TryingPracticeController extends BaseController {
     }
 
     @PostMapping("/create")
-    public void createTP(@Valid @RequestBody TryingPracticeDto tryingPracticeDto) {
-        tryingPracticeService.createTP(tryingPracticeDto);
+    public ResponseEntity<ResponseObject> createTP(@Valid @RequestBody TryingPracticeDto tryingPracticeDto) {
+        int lineSuccess = tryingPracticeService.createTP(tryingPracticeDto);
+        return lineSuccess > 0 ?
+                ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                        "Ok", "Đăng ký tập thử thành công", "")) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
+                        "Failed", "Đăng ký tập thử thất bại", ""));
     }
 
     @PostMapping("/contact/{id}")
-    public void contactCustomer(@PathVariable("id") String id) {
-        tryingPracticeService.contactCustomer(id);
+    public String contactCustomer(@PathVariable("id") String id, @RequestBody SearchObject searchObject) {
+        return tryingPracticeService.contactCustomer(id, searchObject.isBl1());
     }
 }

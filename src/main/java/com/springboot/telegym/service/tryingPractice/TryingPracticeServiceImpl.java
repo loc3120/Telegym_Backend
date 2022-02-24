@@ -27,12 +27,12 @@ public class TryingPracticeServiceImpl implements TryingPracticeService {
     }
 
     @Override
-    public void createTP(TryingPracticeDto tryingPracticeDto) {
-        tryingPracticeDao.createTP(tryingPracticeDto);
+    public int createTP(TryingPracticeDto tryingPracticeDto) {
+        return tryingPracticeDao.createTP(tryingPracticeDto);
     }
 
     @Override
-    public void contactCustomer(String id) {
-        tryingPracticeDao.contactCustomer(id);
+    public String contactCustomer(String id, boolean is_contacted) {
+        return tryingPracticeDao.contactCustomer(id, is_contacted);
     }
 }

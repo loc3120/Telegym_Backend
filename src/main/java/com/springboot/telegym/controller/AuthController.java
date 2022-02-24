@@ -5,7 +5,6 @@ import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.ResponseObject;
 import com.springboot.telegym.common.SearchObject;
 import com.springboot.telegym.dto.UserDto;
-import com.springboot.telegym.repository.RoleRepository;
 import com.springboot.telegym.repository.UserRepository;
 import com.springboot.telegym.security.JwtUtils;
 import com.springboot.telegym.service.user.UserService;
@@ -32,9 +31,6 @@ public class AuthController extends BaseController {
     UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
     JwtUtils jwtUtils;
 
     public AuthController(UserService userService) {
@@ -59,7 +55,7 @@ public class AuthController extends BaseController {
 
         return newUserDto != null ?
                 ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
-                        "Ok", "Đăng ký thành công", newUserDto)) :
+                        "Ok", MessageResponse.message, newUserDto)) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(
                         "Failed", MessageResponse.message, ""));
     }
