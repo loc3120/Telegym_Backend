@@ -1,7 +1,13 @@
 package com.springboot.telegym.dto;
 
 import com.springboot.telegym.entity.MembershipCard;
+import lombok.*;
 
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MembershipCardDto {
 
     String id;

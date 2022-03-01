@@ -7,6 +7,7 @@ import com.springboot.telegym.common.SearchObject;
 import com.springboot.telegym.dto.UserDto;
 import com.springboot.telegym.repository.UserRepository;
 import com.springboot.telegym.security.JwtUtils;
+import com.springboot.telegym.service.manageAccessDB.LoginDBService;
 import com.springboot.telegym.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ public class AuthController extends BaseController {
 
     protected final UserService userService;
 
+    protected final LoginDBService loginDBService;
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -33,11 +36,12 @@ public class AuthController extends BaseController {
     @Autowired
     JwtUtils jwtUtils;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, LoginDBService loginDBService) {
         this.userService = userService;
+        this.loginDBService = loginDBService;
     }
 
-    @PostMapping("signin")
+    @PostMapping("/signin")
     public ResponseEntity<ResponseObject> login(@Valid @RequestBody SearchObject searchObject) {
         UserDto userDto = userService.login(searchObject);
         return userDto != null ?
@@ -58,5 +62,10 @@ public class AuthController extends BaseController {
                         "Ok", MessageResponse.message, newUserDto)) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseObject(
                         "Failed", MessageResponse.message, ""));
+    }
+
+    @PostMapping("/logindb")
+    public void loginDataBase(@Valid @RequestBody SearchObject searchObject) {
+        loginDBService.loginDataBase(searchObject.getStr1(), searchObject.getStr2());
     }
 }

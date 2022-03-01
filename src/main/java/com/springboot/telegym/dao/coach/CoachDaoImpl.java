@@ -1,6 +1,7 @@
 package com.springboot.telegym.dao.coach;
 
 import com.springboot.telegym.common.MessageResponse;
+import com.springboot.telegym.common.MyListComparator;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.CoachDto;
 import com.springboot.telegym.entity.Coach;
@@ -29,13 +30,14 @@ public class CoachDaoImpl implements CoachDao {
     @Override
     public PageData<CoachDto> getAllCoach(Pageable pageable) {
         List<Coach> coachList = coachRepository.selectCoach();
+        coachList.sort(new MyListComparator(pageable));
 
         PagedListHolder<Coach> coachPage = new PagedListHolder<>(coachList);
         coachPage.setPage(pageable.getPageNumber());
         coachPage.setPageSize(pageable.getPageSize());
         List<CoachDto> coachDtoList = new ArrayList<>();
         for (Coach data : coachPage.getPageList()) {
-            coachDtoList.add(convertToCoachDto(data));
+            coachDtoList.add(new CoachDto(data));
         }
         return new PageData<>(coachDtoList, coachPage.getPageCount(), coachPage.getNrOfElements(), coachPage.isLastPage());
     }

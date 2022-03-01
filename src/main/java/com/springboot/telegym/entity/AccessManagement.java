@@ -21,6 +21,10 @@ public class AccessManagement {
 
     private boolean is_checkout;
 
+    private Date time_checkout;
+
+    private Date updated_time;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_class")
     private GeneralClass generalClass;

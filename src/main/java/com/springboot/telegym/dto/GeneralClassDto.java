@@ -1,6 +1,5 @@
 package com.springboot.telegym.dto;
 
-import com.springboot.telegym.entity.Coach;
 import com.springboot.telegym.entity.GeneralClass;
 import lombok.*;
 
@@ -23,7 +22,7 @@ public class GeneralClassDto extends BaseDto{
 
     String practice_time;
 
-    Coach coach;
+    String coach;
 
     public GeneralClassDto(GeneralClass generalClass) {
         super(generalClass);
@@ -33,6 +32,6 @@ public class GeneralClassDto extends BaseDto{
         this.description = generalClass.getDescription();
         this.capacity = generalClass.getCapacity();
         this.practice_time = generalClass.getPractice_time();
-        this.coach = generalClass.getCoach();
+        this.coach = generalClass.getCoach().getId();
     }
 }

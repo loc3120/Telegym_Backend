@@ -29,10 +29,22 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+//    public static UserDetailsImpl build(User user) {
+//        List<GrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(new SimpleGrantedAuthority(user.getRole().getRolename()));
+////            user.getRole().getPermissions().forEach(p -> authorities.add(new SimpleGrantedAuthority(p.getPermissionName())));
+//        return new UserDetailsImpl(
+//                user.getId(),
+//                user.getUsername(),
+//                user.getPass(),
+//                authorities);
+//    }
+
     public static UserDetailsImpl build(User user) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority(user.getRole().getRolename()));
-//            user.getRole().getPermissions().forEach(p -> authorities.add(new SimpleGrantedAuthority(p.getPermissionName())));
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getRolename()));
+
+        user.getRole().getPermissionSet().forEach(p -> authorities.add(new SimpleGrantedAuthority(p.getPermission_name())));
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
@@ -48,6 +60,7 @@ public class UserDetailsImpl implements UserDetails {
     public String getId() {
         return id;
     }
+
     @Override
     public String getPassword() {
         return pass;

@@ -11,7 +11,7 @@ public class PageUtils {
         int page = structurePageRequest.getPage() != 0 ? structurePageRequest.getPage() - 1 : 0;
         String sortProperty = (structurePageRequest.getSortProperty() == null || structurePageRequest.getSortProperty().isBlank()) ?
                 "created_time" : structurePageRequest.getSortProperty();
-        String sortOrder = (structurePageRequest.getSortProperty() == null || structurePageRequest.getSortProperty().isBlank()) ?
+        String sortOrder = (structurePageRequest.getSortOrder() == null || structurePageRequest.getSortOrder().isBlank()) ?
                 "desc" : structurePageRequest.getSortOrder();
 
         return org.springframework.data.domain.PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortProperty);

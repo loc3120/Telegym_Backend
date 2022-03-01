@@ -4,7 +4,6 @@ import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.CandidateDto;
 import com.springboot.telegym.entity.Candidate;
-import com.springboot.telegym.repository.CandidateRepository;
 import com.springboot.telegym.request.SendMailForCandidate;
 import com.springboot.telegym.security.SecurityUser;
 import com.springboot.telegym.security.UserDetailsImpl;
@@ -24,17 +23,11 @@ import java.util.UUID;
 @Component
 public class CandidateDaoImpl implements CandidateDao {
 
-    private final CandidateRepository candidateRepository;
-
     @Autowired
     private SendMailForCandidate sendMailForCandidate;
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    public CandidateDaoImpl(CandidateRepository candidateRepository) {
-        this.candidateRepository = candidateRepository;
-    }
 
     @Override
     public PageData<CandidateDto> getAllCandidate(Pageable pageable, String search) {
@@ -102,8 +95,16 @@ public class CandidateDaoImpl implements CandidateDao {
         query.execute();
 
         try {
-            String candidateName = (String) query.getSingleResult();
-            sendMailForCandidate.sendMail(candidateName, approvalValue);
+            List<Object[]> candidateInfo = query.getResultList();
+            StringBuilder candidateName = null;
+            StringBuilder candidateEmail = null;
+            for (Object[] data : candidateInfo) {
+                candidateName = new StringBuilder((String) data[0]);
+                candidateEmail = new StringBuilder((String) data[1]);
+            }
+
+            assert candidateName != null;
+            sendMailForCandidate.sendMail(candidateName.toString(), approvalValue, candidateEmail.toString());
             return MessageResponse.message = "Duyệt bài thành công";
         } catch (NoResultException nre) {
             return MessageResponse.message = "Không tìm thấy id bài ứng tuyển";

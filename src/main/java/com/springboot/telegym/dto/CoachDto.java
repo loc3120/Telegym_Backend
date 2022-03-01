@@ -32,9 +32,9 @@ public class CoachDto extends BaseDto{
         this.email = coach.getEmail();
         this.phone_number = coach.getPhone_number();
         this.description = coach.getDescription();
-        this.setCreated_time(coach.getCreated_time());
-        this.setCreated_by(coach.getCreated_by());
-        this.setUpdated_time(coach.getUpdated_time());
-        this.setUpdated_by(coach.getUpdated_by());
+        setCreated_time(coach.getCreated_time());
+        setCreated_by(coach.getCreated_by());
+        setUpdated_time(coach.getUpdated_time());
+        setUpdated_by(coach.getUpdated_by());
     }
 }

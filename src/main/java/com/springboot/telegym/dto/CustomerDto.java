@@ -40,10 +40,10 @@ public class CustomerDto extends BaseDto {
         this.time_expire = customer.getTime_expire();
         this.is_expire = customer.is_expire();
         this.exercise_form = customer.getExercise_form();
-        this.membershipCard = customer.getMembershipCard().getCardname();
-        this.setCreated_time(customer.getCreated_time());
-        this.setCreated_by(customer.getCreated_by());
-        this.setUpdated_time(customer.getUpdated_time());
-        this.setUpdated_by(customer.getUpdated_by());
+        this.membershipCard = customer.getMembershipCard().getId();
+        setCreated_time(customer.getCreated_time());
+        setCreated_by(customer.getCreated_by());
+        setUpdated_time(customer.getUpdated_time());
+        setUpdated_by(customer.getUpdated_by());
     }
 }

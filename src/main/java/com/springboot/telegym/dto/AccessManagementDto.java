@@ -18,6 +18,10 @@ public class AccessManagementDto {
 
     boolean is_checkout;
 
+    Date time_checkout;
+
+    Date updated_time;
+
     String generalClass;
 
     String customer;
@@ -26,6 +30,8 @@ public class AccessManagementDto {
         this.id = accessManagement.getId();
         this.time_checkin = accessManagement.getTime_checkin();
         this.is_checkout = accessManagement.is_checkout();
+        this.time_checkout = accessManagement.getTime_checkout();
+        this.updated_time = accessManagement.getUpdated_time();
         this.generalClass = accessManagement.getGeneralClass().getName();
         this.customer = accessManagement.getCustomer().getName();
     }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface RoleDao {
     List<RoleDto> getAll();
+
+    int modifyPermission(String tableName, String permissionName);
 }

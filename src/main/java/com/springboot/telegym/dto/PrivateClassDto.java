@@ -24,7 +24,7 @@ public class PrivateClassDto {
 
     int remaining_sessions;
 
-    Date Created_time;
+    Date created_time;
 
     String created_by;
 

@@ -28,4 +28,14 @@ public class Coach extends BaseEntity {
     private String phone_number;
 
     private String description;
+
+    public Coach(String id, String name, Date dateOfBirth, String email, String phone_number, String description) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phone_number = phone_number;
+        this.description = description;
+    }
 }

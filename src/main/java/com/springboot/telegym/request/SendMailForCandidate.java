@@ -1,6 +1,5 @@
 package com.springboot.telegym.request;
 
-import com.springboot.telegym.common.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,7 +16,7 @@ public class SendMailForCandidate {
     @Autowired
     public JavaMailSender emailSender;
 
-    public void sendMail(String name, boolean isApproved) {
+    public void sendMail(String name, boolean isApproved, String receiveMail) {
 
         SimpleMailMessage message = new SimpleMailMessage();
 
@@ -40,7 +39,7 @@ public class SendMailForCandidate {
                 "\nTelegym 4: Tầng 3 tòa nhà trung tâm bến cầu Thị Nghè, số 2 Thị Nghè, TP.HCM" +
                 "\nTelegym 5: Tầng 2 tòa nhà SF8, số 10 Bình Tân, TP.HCM";
 
-        message.setTo(Constant.RECEIVED_MAIL);
+        message.setTo(receiveMail);
         message.setSubject("Hệ thống phòng tập chuyên nghiệp Telegym");
 
         if (!isApproved) {

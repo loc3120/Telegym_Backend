@@ -12,11 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 @MappedSuperclass
 public abstract class BaseEntity {
-    private Date created_time;
+    protected Date created_time;
 
-    private String created_by;
+    protected String created_by;
 
-    private Date updated_time;
+    protected Date updated_time;
 
-    private String updated_by;
+    protected String updated_by;
 }

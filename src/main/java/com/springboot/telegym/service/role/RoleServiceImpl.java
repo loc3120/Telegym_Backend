@@ -1,5 +1,6 @@
 package com.springboot.telegym.service.role;
 
+import com.springboot.telegym.common.SearchObject;
 import com.springboot.telegym.dao.role.RoleDao;
 import com.springboot.telegym.dto.RoleDto;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDto> getAll() {
         return roleDao.getAll();
+    }
+
+    @Override
+    public int modifyPermission(SearchObject searchObject) {
+        return roleDao.modifyPermission(searchObject.getStr1(), searchObject.getStr2());
     }
 }
