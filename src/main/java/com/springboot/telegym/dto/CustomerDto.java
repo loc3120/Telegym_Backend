@@ -10,7 +10,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerDto extends BaseDto {
+public class CustomerDto {
 
     String id;
 
@@ -26,12 +26,11 @@ public class CustomerDto extends BaseDto {
 
     boolean is_expire;
 
-    private String exercise_form;
+    String exercise_form;
 
     String membershipCard;
 
     public CustomerDto(Customer customer) {
-        super(customer);
         this.id = customer.getId();
         this.name = customer.getName();
         this.phone_number = customer.getPhone_number();
@@ -41,9 +40,5 @@ public class CustomerDto extends BaseDto {
         this.is_expire = customer.is_expire();
         this.exercise_form = customer.getExercise_form();
         this.membershipCard = customer.getMembershipCard().getId();
-        setCreated_time(customer.getCreated_time());
-        setCreated_by(customer.getCreated_by());
-        setUpdated_time(customer.getUpdated_time());
-        setUpdated_by(customer.getUpdated_by());
     }
 }

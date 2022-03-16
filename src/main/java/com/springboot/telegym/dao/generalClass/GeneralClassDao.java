@@ -1,12 +1,16 @@
 package com.springboot.telegym.dao.generalClass;
 
-import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.GeneralClassDto;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface GeneralClassDao {
 
     void createOrUpdate(GeneralClassDto generalClassDto);
 
-    PageData<GeneralClassDto> getAllGC(Pageable pageable);
+    List<GeneralClassDto> getAllGC();
+
+    List<GeneralClassDto> listNameGeneralClass(String type);
+
+    GeneralClassDto detailGeneralClass(String id);
 }

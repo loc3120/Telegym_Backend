@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/telegym/candidate/**").permitAll()
                 .antMatchers("/api/telegym/tp/create").permitAll()
                 .antMatchers("/api/telegym/membershipcard/getall").permitAll()
+                .antMatchers("/api/telegym/coach/gettop6").permitAll()
+                .antMatchers("/api/telegym/coach/rating").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

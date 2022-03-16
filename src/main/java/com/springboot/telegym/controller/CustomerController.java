@@ -1,6 +1,7 @@
 package com.springboot.telegym.controller;
 
 import com.springboot.telegym.common.Constant;
+import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.ResponseObject;
 import com.springboot.telegym.dto.CustomerDto;
 import com.springboot.telegym.request.StructurePageRequest;
@@ -25,8 +26,10 @@ public class CustomerController extends BaseController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
     @PostMapping("/modify")
-    public void modifyCustomer(@Valid @RequestBody CustomerDto customerDto) {
+    public ResponseEntity<ResponseObject> modifyCustomer(@Valid @RequestBody CustomerDto customerDto) {
         customerService.createOrUpdate(customerDto);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                "Ok", MessageResponse.message, ""));
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
@@ -40,5 +43,12 @@ public class CustomerController extends BaseController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
                 "Failed", "Lỗi trong quá trình in danh sách", ""));
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
+    @GetMapping("/detail")
+    public ResponseEntity<ResponseObject> detailCustomer(String id) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                "Ok", MessageResponse.message, customerService.customerDetail(id)));
     }
 }

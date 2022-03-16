@@ -2,6 +2,7 @@ package com.springboot.telegym.service.accessManagement;
 
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.AccessManagementDto;
+import com.springboot.telegym.dto.CustomerDto;
 import com.springboot.telegym.request.StructurePageRequest;
 
 public interface AccessManagementService {
@@ -12,7 +13,7 @@ public interface AccessManagementService {
 
     PageData<AccessManagementDto> selectEntryAndExitHistoryGeneralClass(StructurePageRequest structurePageRequest, String id_class);
 
-    PageData<AccessManagementDto> listCustomerInClass(StructurePageRequest structurePageRequest, String id_class);
+    PageData<CustomerDto> listCustomerInClass(StructurePageRequest structurePageRequest, String id_class);
 
     int numberCustomerInClass(String id_class);
 }

@@ -12,17 +12,21 @@ import java.util.Date;
 @NoArgsConstructor
 public class CoachDto extends BaseDto{
 
-    private String id;
+    String id;
 
-    private String name;
+    String name;
 
-    private Date dateOfBirth;
+    Date dateOfBirth;
 
-    private String email;
+    String email;
 
-    private String phone_number;
+    String phone_number;
 
-    private String description;
+    String description;
+
+    float rating;
+
+    boolean is_deleted;
 
     public CoachDto(Coach coach) {
         super(coach);
@@ -32,6 +36,8 @@ public class CoachDto extends BaseDto{
         this.email = coach.getEmail();
         this.phone_number = coach.getPhone_number();
         this.description = coach.getDescription();
+        this.rating = coach.getRating();
+        this.is_deleted = coach.is_deleted();
         setCreated_time(coach.getCreated_time());
         setCreated_by(coach.getCreated_by());
         setUpdated_time(coach.getUpdated_time());

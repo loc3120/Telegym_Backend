@@ -25,9 +25,11 @@ public class PrivateClassServiceImpl implements PrivateClassService {
     }
 
     @Override
-    public PageData<PrivateClassDto> getAllPrivateClass(StructurePageRequest structurePageRequest) {
+    public PageData<PrivateClassDto> getAllPrivateClass(StructurePageRequest structurePageRequest, String search) {
+        structurePageRequest.setSortProperty("name");
+        structurePageRequest.setSortOrder("asc");
         Pageable pageable = PageUtils.getPageable(structurePageRequest);
 
-        return privateClassDao.getAllPrivateClass(pageable);
+        return privateClassDao.getAllPrivateClass(pageable, search);
     }
 }

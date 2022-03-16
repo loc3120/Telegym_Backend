@@ -9,4 +9,6 @@ public interface CustomerService {
     PageData<CustomerDto> getAllCustomer(StructurePageRequest structurePageRequest, String search);
 
     void createOrUpdate(CustomerDto customerDto);
+
+    CustomerDto customerDetail(String id);
 }

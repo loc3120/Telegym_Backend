@@ -11,6 +11,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserResponseQuery {
 
+    String id;
+
     String username;
 
     String name;

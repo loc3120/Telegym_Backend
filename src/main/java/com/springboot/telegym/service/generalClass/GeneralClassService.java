@@ -1,12 +1,16 @@
 package com.springboot.telegym.service.generalClass;
 
-import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.GeneralClassDto;
-import com.springboot.telegym.request.StructurePageRequest;
+
+import java.util.List;
 
 public interface GeneralClassService {
 
     void createOrUpdate(GeneralClassDto generalClassDto);
 
-    PageData<GeneralClassDto> selectGC(StructurePageRequest structurePageRequest);
+    List<GeneralClassDto> selectGC();
+
+    List<GeneralClassDto> listNameGeneralClass(String type);
+
+    GeneralClassDto detailGeneralClass(String id);
 }

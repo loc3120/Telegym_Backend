@@ -8,5 +8,5 @@ public interface PrivateClassService {
 
     void createOrUpdate(PrivateClassDto privateClassDto);
 
-    PageData<PrivateClassDto> getAllPrivateClass(StructurePageRequest structurePageRequest);
+    PageData<PrivateClassDto> getAllPrivateClass(StructurePageRequest structurePageRequest, String search);
 }

@@ -22,9 +22,9 @@ public class AccessManagementDto {
 
     Date updated_time;
 
-    String generalClass;
+    String id_generalClass;
 
-    String customer;
+    String id_customer;
 
     public AccessManagementDto(AccessManagement accessManagement) {
         this.id = accessManagement.getId();
@@ -32,7 +32,7 @@ public class AccessManagementDto {
         this.is_checkout = accessManagement.is_checkout();
         this.time_checkout = accessManagement.getTime_checkout();
         this.updated_time = accessManagement.getUpdated_time();
-        this.generalClass = accessManagement.getGeneralClass().getName();
-        this.customer = accessManagement.getCustomer().getName();
+        this.id_generalClass = accessManagement.getGeneralClass().getId();
+        this.id_generalClass = accessManagement.getCustomer().getId();
     }
 }

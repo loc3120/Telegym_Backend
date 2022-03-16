@@ -4,7 +4,7 @@ import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.CustomerDto;
 import com.springboot.telegym.entity.Customer;
-import com.springboot.telegym.request.SendPromotionalForCustomer;
+import com.springboot.telegym.repository.CustomerRepository;
 import com.springboot.telegym.security.SecurityUser;
 import com.springboot.telegym.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,14 @@ import java.util.UUID;
 public class CustomerDaoImpl implements CustomerDao {
 
     @Autowired
-    private SendPromotionalForCustomer sendPromotionalForCustomer;
+    private final CustomerRepository customerRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    public CustomerDaoImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @Override
     public PageData<CustomerDto> getAllCustomer(Pageable pageable, String search) {
@@ -61,6 +65,7 @@ public class CustomerDaoImpl implements CustomerDao {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Update_Customer");
             registerAndSetParamProcCustomer(query, customerDto, userDetails.getId());
             query.execute();
+            MessageResponse.message = "Update thành công";
         }
         else if (userDetails == null) {
             MessageResponse.message = "Không xác định người dùng";
@@ -69,7 +74,27 @@ public class CustomerDaoImpl implements CustomerDao {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Create_Customer");
             registerAndSetParamProcCustomer(query, customerDto, userDetails.getId());
             query.execute();
+            MessageResponse.message = "Thêm mới thành công";
         }
+    }
+
+    @Override
+    public CustomerDto customerDetail(String id) {
+        List<Object[]> customerDetail = customerRepository.selectDetailCoach(id);
+        if (customerDetail == null) {
+            MessageResponse.message = "Không tìm thấy khách hàng";
+            return null;
+        }
+        else {
+            CustomerDto customerDto = new CustomerDto();
+            for (Object[] data : customerDetail) {
+                customerDto.setId(data[0].toString());
+                customerDto.setName(data[1].toString());
+            }
+            MessageResponse.message = "Tìm thấy khách hàng thành công";
+            return customerDto;
+        }
+
     }
 
     private void registerAndSetParamProcCustomer(StoredProcedureQuery query, CustomerDto customerDto, String id_user) {
@@ -114,7 +139,7 @@ public class CustomerDaoImpl implements CustomerDao {
                 .time_expire(customer.getTime_expire())
                 .is_expire(customer.is_expire())
                 .exercise_form(customer.getExercise_form())
-                .membershipCard(customer.getMembershipCard().getId())
+                .membershipCard(customer.getMembershipCard().getCardname())
                 .build();
     }
 }

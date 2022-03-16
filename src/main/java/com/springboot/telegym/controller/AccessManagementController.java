@@ -5,6 +5,7 @@ import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.common.ResponseObject;
 import com.springboot.telegym.dto.AccessManagementDto;
+import com.springboot.telegym.dto.CustomerDto;
 import com.springboot.telegym.request.StructurePageRequest;
 import com.springboot.telegym.service.accessManagement.AccessManagementService;
 import org.springframework.http.HttpStatus;
@@ -46,9 +47,9 @@ public class AccessManagementController extends BaseController {
     }
 
     @GetMapping("/historyclass")
-    public ResponseEntity<ResponseObject> getHistoryGeneralClass(StructurePageRequest structurePageRequest, String id_class) {
+    public ResponseEntity<ResponseObject> getHistoryGeneralClass(StructurePageRequest structurePageRequest, String id_generalClass) {
         PageData<AccessManagementDto> accessManagementDtoPage =
-                accessManagementService.selectEntryAndExitHistoryGeneralClass(structurePageRequest, id_class);
+                accessManagementService.selectEntryAndExitHistoryGeneralClass(structurePageRequest, id_generalClass);
         return accessManagementDtoPage.getData() != null ?
                 ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
                         "Ok", "Truy vấn thành công", accessManagementDtoPage)) :
@@ -57,19 +58,19 @@ public class AccessManagementController extends BaseController {
     }
 
     @GetMapping("/listcustomernow")
-    public ResponseEntity<ResponseObject> getListCustomerNow(StructurePageRequest structurePageRequest, String id_class) {
-        PageData<AccessManagementDto> accessManagementDtoPage =
-                accessManagementService.listCustomerInClass(structurePageRequest, id_class);
-        return accessManagementDtoPage.getData() != null ?
+    public ResponseEntity<ResponseObject> getListCustomerNow(StructurePageRequest structurePageRequest, String id_generalClass) {
+        PageData<CustomerDto> customerDtoPage =
+                accessManagementService.listCustomerInClass(structurePageRequest, id_generalClass);
+        return customerDtoPage.getData() != null ?
                 ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
-                        "Ok", "Truy vấn thành công", accessManagementDtoPage)) :
+                        "Ok", "Truy vấn thành công", customerDtoPage)) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject(
                         "Failed", "Truy vấn thất bại", ""));
     }
 
-    @GetMapping("/numbercustomernow")
-    public ResponseEntity<ResponseObject> getNumberCustomerNow(String id_class) {
-        int lineSuccess = accessManagementService.numberCustomerInClass(id_class);
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Ok", "Truy vấn thành công", lineSuccess));
-    }
+//    @GetMapping("/numbercustomernow")
+//    public ResponseEntity<ResponseObject> getNumberCustomerNow(String id_generalClass) {
+//        int lineSuccess = accessManagementService.numberCustomerInClass(id_generalClass);
+//        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("Ok", "Truy vấn thành công", lineSuccess));
+//    }
 }

@@ -3,6 +3,7 @@ package com.springboot.telegym.service.accessManagement;
 import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dao.accessManagement.AccessManagementDao;
 import com.springboot.telegym.dto.AccessManagementDto;
+import com.springboot.telegym.dto.CustomerDto;
 import com.springboot.telegym.request.PageUtils;
 import com.springboot.telegym.request.StructurePageRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,23 +34,23 @@ public class AccessManagementServiceImpl implements AccessManagementService {
     }
 
     @Override
-    public PageData<AccessManagementDto> selectEntryAndExitHistoryGeneralClass(StructurePageRequest structurePageRequest, String id_class) {
+    public PageData<AccessManagementDto> selectEntryAndExitHistoryGeneralClass(StructurePageRequest structurePageRequest, String id_generalClass) {
         structurePageRequest.setSortProperty("updated_time");
         Pageable pageable = PageUtils.getPageable(structurePageRequest);
 
-        return accessManagementDao.selectEntryAndExitHistoryCustomer(pageable, id_class);
+        return accessManagementDao.selectEntryAndExitHistoryGeneralClass(pageable, id_generalClass);
     }
 
     @Override
-    public PageData<AccessManagementDto> listCustomerInClass(StructurePageRequest structurePageRequest, String id_class) {
-        structurePageRequest.setSortProperty("id");
+    public PageData<CustomerDto> listCustomerInClass(StructurePageRequest structurePageRequest, String id_generalClass) {
+        structurePageRequest.setSortProperty("name");
         Pageable pageable = PageUtils.getPageable(structurePageRequest);
 
-        return accessManagementDao.selectEntryAndExitHistoryCustomer(pageable, id_class);
+        return accessManagementDao.listCustomerInClass(pageable, id_generalClass);
     }
 
     @Override
-    public int numberCustomerInClass(String id_class) {
-        return accessManagementDao.numberCustomerInClass(id_class);
+    public int numberCustomerInClass(String id_generalClass) {
+        return accessManagementDao.numberCustomerInClass(id_generalClass);
     }
 }

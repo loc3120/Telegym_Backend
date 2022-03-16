@@ -87,7 +87,7 @@ public class TryingPracticeDaoImpl implements TryingPracticeDao {
         query.setParameter("id", id);
         assert userDetails != null;
         query.setParameter("reply_by", userDetails.getId());
-        query.setParameter("is_contacted", true);
+        query.setParameter("is_contacted", is_contacted);
 
         query.execute();
 

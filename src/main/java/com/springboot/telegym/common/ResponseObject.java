@@ -4,14 +4,14 @@ public class ResponseObject {
 
     private String status;
     private String message;
-    private Object data;
+    private Object dataResponse;
 
     public ResponseObject() {}
 
-    public ResponseObject(String status, String message, Object data) {
+    public ResponseObject(String status, String message, Object dataResponse) {
         this.status = status;
         this.message = message;
-        this.data = data;
+        this.dataResponse = dataResponse;
     }
 
     public String getStatus() {
@@ -30,11 +30,11 @@ public class ResponseObject {
         this.message = message;
     }
 
-    public Object getData() {
-        return data;
+    public Object getDataResponse() {
+        return dataResponse;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setDataResponse(Object dataResponse) {
+        this.dataResponse = dataResponse;
     }
 }

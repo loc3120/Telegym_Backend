@@ -1,16 +1,12 @@
 package com.springboot.telegym.dao.generalClass;
 
 import com.springboot.telegym.common.MessageResponse;
-import com.springboot.telegym.common.MyListComparator;
-import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dto.GeneralClassDto;
 import com.springboot.telegym.entity.GeneralClass;
 import com.springboot.telegym.repository.GeneralClassRepository;
 import com.springboot.telegym.security.SecurityUser;
 import com.springboot.telegym.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.support.PagedListHolder;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +40,7 @@ public class GeneralClassDaoImpl implements GeneralClassDao {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Update_GeneralClass");
             registerAndSetParamProcGC(query, generalClassDto, userDetails.getId());
             query.execute();
+            MessageResponse.message = "Thêm đổi thông tin thành công";
         }
         else if (userDetails == null) {
             MessageResponse.message = "Không xác định người dùng";
@@ -52,24 +49,45 @@ public class GeneralClassDaoImpl implements GeneralClassDao {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Create_GeneralClass");
             registerAndSetParamProcGC(query, generalClassDto, userDetails.getId());
             query.execute();
+            MessageResponse.message = "Thêm lớp học thành công";
         }
 
     }
 
     @Override
-    public PageData<GeneralClassDto> getAllGC(Pageable pageable) {
+    public List<GeneralClassDto> getAllGC() {
 
         List<GeneralClass> generalClassList = generalClassRepository.selectGC();
-        generalClassList.sort(new MyListComparator(pageable));
-
-        PagedListHolder<GeneralClass> generalClassPage = new PagedListHolder<>(generalClassList);
-        generalClassPage.setPage(pageable.getPageNumber());
-        generalClassPage.setPageSize(pageable.getPageSize());
         List<GeneralClassDto> generalClassDtoList = new ArrayList<>();
-        for (GeneralClass data : generalClassPage.getPageList()) {
+
+        for (GeneralClass data : generalClassList) {
             generalClassDtoList.add(convertToGeneralClassDto(data));
         }
-        return new PageData<>(generalClassDtoList, generalClassPage.getPageCount(), generalClassPage.getNrOfElements(), generalClassPage.isLastPage());
+        return generalClassDtoList;
+    }
+
+    @Override
+    public List<GeneralClassDto> listNameGeneralClass(String type) {
+
+        List<GeneralClass> generalClassList = generalClassRepository.selectAllNameOfType(type);
+        List<GeneralClassDto> resultObject = new ArrayList<>();
+        for (GeneralClass data : generalClassList) {
+            resultObject.add(convertToGeneralClassDto(data));
+        }
+        return resultObject;
+    }
+
+    @Override
+    public GeneralClassDto detailGeneralClass(String id) {
+        GeneralClass generalClass = generalClassRepository.selectDetailGC(id);
+        if (generalClass == null) {
+            MessageResponse.message = "Không tìm thấy đối tượng";
+            return null;
+        }
+        else {
+            MessageResponse.message = "Tìm thành công";
+            return convertToGeneralClassDto(generalClass);
+        }
     }
 
     private void registerAndSetParamProcGC(StoredProcedureQuery query, GeneralClassDto generalClassDto, String id_user) {

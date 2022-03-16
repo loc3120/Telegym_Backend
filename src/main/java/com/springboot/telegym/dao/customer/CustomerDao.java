@@ -9,4 +9,6 @@ public interface CustomerDao {
     PageData<CustomerDto> getAllCustomer(Pageable pageable, String search);
 
     void createOrUpdate(CustomerDto customerDto);
+
+    CustomerDto customerDetail(String id);
 }

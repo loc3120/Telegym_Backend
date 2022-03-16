@@ -119,6 +119,10 @@ public class CandidateDaoImpl implements CandidateDao {
                 .email(candidate.getEmail())
                 .phone_number(candidate.getPhone_number())
                 .description(candidate.getDescription())
+                .isApproved(candidate.is_approve())
+                .time_sent(candidate.getTime_sent())
+                .time_reply(candidate.getTime_reply())
+                .reply_by(candidate.getReply_by())
                 .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.springboot.telegym.controller;
 
 import com.springboot.telegym.common.Constant;
+import com.springboot.telegym.common.MessageResponse;
 import com.springboot.telegym.common.ResponseObject;
 import com.springboot.telegym.dto.PrivateClassDto;
 import com.springboot.telegym.request.StructurePageRequest;
@@ -25,11 +26,11 @@ public class PrivateClassController extends BaseController{
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
     @GetMapping("/getall")
-    public ResponseEntity<ResponseObject> getAllPrivateClass(StructurePageRequest structurePageRequest) {
+    public ResponseEntity<ResponseObject> getAllPrivateClass(StructurePageRequest structurePageRequest, String search) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("Ok", "In danh sách thành công",
-                            privateClassService.getAllPrivateClass(structurePageRequest)));
+                            privateClassService.getAllPrivateClass(structurePageRequest, search)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,7 +40,9 @@ public class PrivateClassController extends BaseController{
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_STAFF')")
     @PostMapping("/modify")
-    public void modifyPrivateClass(@Valid @RequestBody PrivateClassDto privateClassDto) {
+    public ResponseEntity<ResponseObject> modifyPrivateClass(@Valid @RequestBody PrivateClassDto privateClassDto) {
         privateClassService.createOrUpdate(privateClassDto);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject(
+                "Ok", MessageResponse.message, ""));
     }
 }

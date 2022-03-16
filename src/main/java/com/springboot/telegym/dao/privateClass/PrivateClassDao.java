@@ -8,5 +8,5 @@ public interface PrivateClassDao {
 
     void createOrUpdate(PrivateClassDto privateClassDto);
 
-    PageData<PrivateClassDto> getAllPrivateClass(Pageable pageable);
+    PageData<PrivateClassDto> getAllPrivateClass(Pageable pageable, String search);
 }

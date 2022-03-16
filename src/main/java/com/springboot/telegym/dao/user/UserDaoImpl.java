@@ -110,7 +110,15 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int deleteById(String id) {
+        UserDetailsImpl userDetails = SecurityUser.identifyCurrentUser();
+        assert userDetails != null;
+        if (id.equals(userDetails.getId())) {
+            MessageResponse.message = "Không thể xoá tài khoản của chính mình";
+            return 0;
+        }
+
         int lineSuccess = userRepository.deleteUser(id);
+
         if (lineSuccess > 0)
             MessageResponse.message = "Xoá thành công";
         else
@@ -157,10 +165,11 @@ public class UserDaoImpl implements UserDao {
 
         for (Object[] data : userList) {
             UserResponseQuery userResponseQuery = new UserResponseQuery();
-            userResponseQuery.setUsername((String) data[0]);
-            userResponseQuery.setName((String) data[1]);
-            userResponseQuery.setRolename((String) data[2]);
-            userResponseQuery.setCreated_time((Date) data[3]);
+            userResponseQuery.setId((String) data[0]);
+            userResponseQuery.setUsername((String) data[1]);
+            userResponseQuery.setName((String) data[2]);
+            userResponseQuery.setRolename((String) data[3]);
+            userResponseQuery.setCreated_time((Date) data[4]);
             userResponseQueryList.add(userResponseQuery);
         }
 
@@ -173,9 +182,11 @@ public class UserDaoImpl implements UserDao {
         User u = new User();
         List<UserDto> userDtoList = new ArrayList<>();
         for (UserResponseQuery data : userPage.getPageList()) {
+            String id = data.getId();
             String username = data.getUsername();
             String name = data.getName();
             Optional<Role> role = roleRepository.findByRolename(data.getRolename());
+            u.setId(id);
             u.setUsername(username);
             u.setName(name);
             role.ifPresent(u::setRole);
@@ -187,6 +198,7 @@ public class UserDaoImpl implements UserDao {
 
     private UserDto convertToUserDto(User u) {
         return UserDto.builder()
+                .id(u.getId())
                 .username(u.getUsername())
                 .name(u.getName())
                 .role(u.getRole().getRolename())

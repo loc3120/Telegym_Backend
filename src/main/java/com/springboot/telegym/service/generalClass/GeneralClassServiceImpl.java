@@ -1,15 +1,13 @@
 package com.springboot.telegym.service.generalClass;
 
-import com.springboot.telegym.common.PageData;
 import com.springboot.telegym.dao.generalClass.GeneralClassDao;
 import com.springboot.telegym.dto.GeneralClassDto;
-import com.springboot.telegym.request.PageUtils;
-import com.springboot.telegym.request.StructurePageRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @Service
@@ -25,10 +23,17 @@ public class GeneralClassServiceImpl implements GeneralClassService {
     }
 
     @Override
-    public PageData<GeneralClassDto> selectGC(StructurePageRequest structurePageRequest) {
-        structurePageRequest.setSortProperty("name");
-        Pageable pageable = PageUtils.getPageable(structurePageRequest);
+    public List<GeneralClassDto> selectGC() {
+        return generalClassDao.getAllGC();
+    }
 
-        return generalClassDao.getAllGC(pageable);
+    @Override
+    public List<GeneralClassDto> listNameGeneralClass(String type) {
+        return generalClassDao.listNameGeneralClass(type);
+    }
+
+    @Override
+    public GeneralClassDto detailGeneralClass(String id) {
+        return generalClassDao.detailGeneralClass(id);
     }
 }

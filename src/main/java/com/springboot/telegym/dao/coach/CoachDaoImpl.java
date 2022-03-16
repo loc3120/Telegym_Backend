@@ -28,8 +28,8 @@ public class CoachDaoImpl implements CoachDao {
     }
 
     @Override
-    public PageData<CoachDto> getAllCoach(Pageable pageable) {
-        List<Coach> coachList = coachRepository.selectCoach();
+    public PageData<CoachDto> getAllCoach(Pageable pageable, String search) {
+        List<Coach> coachList = coachRepository.selectCoach(search);
         coachList.sort(new MyListComparator(pageable));
 
         PagedListHolder<Coach> coachPage = new PagedListHolder<>(coachList);
@@ -77,6 +77,58 @@ public class CoachDaoImpl implements CoachDao {
         }
     }
 
+    @Override
+    public int ratingCoach(String id, float rating) {
+        int lineSuccess = coachRepository.ratingCoach(id, rating);
+        if (lineSuccess > 0) {
+            MessageResponse.message = "Chấm điểm thành công";
+        }
+        else {
+            MessageResponse.message = "Chấm điểm thất bại";
+        }
+        return lineSuccess;
+    }
+
+    @Override
+    public List<CoachDto> top6RatingCoach() {
+        List<Coach> coachList = coachRepository.top6RatingCoach();
+        List<CoachDto> coachDtoList = new ArrayList<>();
+        for (Coach c : coachList) {
+            coachDtoList.add(convertToCoachDto(c));
+        }
+        return coachDtoList;
+    }
+
+    @Override
+    public CoachDto coachDetail(String id) {
+        List<Object[]> resultList = coachRepository.selectDetailCoach(id);
+        if (resultList == null) {
+            MessageResponse.message = "Không tìm thấy huấn luyện viên";
+            return null;
+        }
+        else {
+            CoachDto coachDto = new CoachDto();
+            for (Object[] data : resultList) {
+                coachDto.setId(data[0].toString());
+                coachDto.setName(data[1].toString());
+            }
+            MessageResponse.message = "Tìm thấy huấn luyện viên thành công";
+            return coachDto;
+        }
+    }
+
+    @Override
+    public int deleteCoach(String id) {
+        int lineSuccess = coachRepository.deleteCoach(id);
+        if (lineSuccess > 0) {
+            MessageResponse.message = "Xoá thành công";
+        }
+        else {
+            MessageResponse.message = "Xoá thất bại";
+        }
+        return lineSuccess;
+    }
+
 //    @Override
 //    public CoachDto findByEmail(String email) {
 //        Coach coach;
@@ -96,6 +148,8 @@ public class CoachDaoImpl implements CoachDao {
                 .email(coach.getEmail())
                 .phone_number(coach.getPhone_number())
                 .description(coach.getDescription())
+                .rating(coach.getRating())
+                .is_deleted(coach.is_deleted())
                 .build();
     }
 }

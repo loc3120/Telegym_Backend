@@ -1,7 +1,5 @@
 package com.springboot.telegym.dto;
 
-import com.springboot.telegym.entity.Coach;
-import com.springboot.telegym.entity.Customer;
 import com.springboot.telegym.entity.PrivateClass;
 import lombok.*;
 
@@ -28,9 +26,9 @@ public class PrivateClassDto {
 
     String created_by;
 
-    Customer customer;
+    String customer;
 
-    Coach coach;
+    String coach;
 
     public PrivateClassDto(PrivateClass privateClass) {
         this.id = privateClass.getId();
@@ -38,8 +36,8 @@ public class PrivateClassDto {
         this.description = privateClass.getDescription();
         this.number_sessions = privateClass.getNumber_sessions();
         this.remaining_sessions = privateClass.getRemaining_sessions();
-        this.customer = privateClass.getCustomer();
-        this.coach = privateClass.getCoach();
+        this.customer = privateClass.getCustomer().getId();
+        this.coach = privateClass.getCoach().getId();
         setCreated_time(privateClass.getCreated_time());
         setCreated_by(privateClass.getCreated_by());
     }

@@ -31,7 +31,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Procedure(procedureName = "Select_User")
     List<Object[]> searchUserFilter(@Param("Search") String search, @Param("ListRole") String listRole);
 
-    @Query(value = "{CALL Create_User(:id, :username, :pass, :name, :is_deleted, :created_by, :updated_by, :id_role)}",
+    @Query(value = "{CALL Create_User(:id, :username, :pass, :name, :created_by, :updated_by, :id_role)}",
             nativeQuery = true)
     User createUser(@Param("id") String id, @Param("username") String username, @Param("pass") String pass,
                     @Param("name") String name, @Param("created_by") String created_by,

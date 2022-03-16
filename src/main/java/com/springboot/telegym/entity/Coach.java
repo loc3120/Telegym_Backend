@@ -29,7 +29,12 @@ public class Coach extends BaseEntity {
 
     private String description;
 
-    public Coach(String id, String name, Date dateOfBirth, String email, String phone_number, String description) {
+    private float rating;
+
+    private boolean is_deleted;
+
+    public Coach(String id, String name, Date dateOfBirth, String email, String phone_number, String description,
+                 float rating, boolean is_deleted) {
         super();
         this.id = id;
         this.name = name;
@@ -37,5 +42,7 @@ public class Coach extends BaseEntity {
         this.email = email;
         this.phone_number = phone_number;
         this.description = description;
+        this.rating = rating;
+        this.is_deleted = is_deleted;
     }
 }

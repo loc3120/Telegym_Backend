@@ -6,6 +6,7 @@ import com.springboot.telegym.common.ResponseObject;
 import com.springboot.telegym.dto.TrackingProgressDto;
 import com.springboot.telegym.request.StructurePageRequest;
 import com.springboot.telegym.service.trackingProgress.TrackingProgressService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,10 +25,9 @@ public class TrackingProgressController extends BaseController {
         this.trackingProgressService = trackingProgressService;
     }
 
-    @GetMapping("/getall/{id_private_class}")
+    @GetMapping("/getall")
     public ResponseEntity<ResponseObject> getAllTrackingProgress
-            (StructurePageRequest structurePageRequest, @PathVariable("id_private_class") String id_private_class) {
-        System.out.println(id_private_class);
+            (StructurePageRequest structurePageRequest, @Param("id_private_class") String id_private_class) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("Ok", "In danh sách thành công",

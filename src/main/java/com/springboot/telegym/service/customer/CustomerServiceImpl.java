@@ -29,4 +29,9 @@ public class CustomerServiceImpl implements CustomerService {
     public void createOrUpdate(CustomerDto customerDto) {
         customerDao.createOrUpdate(customerDto);
     }
+
+    @Override
+    public CustomerDto customerDetail(String id) {
+        return customerDao.customerDetail(id);
+    }
 }

@@ -14,4 +14,5 @@ public class SearchObject {
     private String str3;
     private Set<String> stringSet1;
     private boolean bl1;
+    private float fl1;
 }

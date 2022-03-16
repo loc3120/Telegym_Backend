@@ -43,18 +43,20 @@ public class PrivateClassDaoImpl implements PrivateClassDao {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Update_PrivateClass");
             registerAndSetParamProcPrivateClass(query, privateClassDto, userDetails.getId());
             query.execute();
+            MessageResponse.message = "Update lớp thành công";
         } else if (userDetails == null) {
             MessageResponse.message = "Không xác định người dùng";
         } else {
             StoredProcedureQuery query = entityManager.createStoredProcedureQuery("Create_PrivateClass");
             registerAndSetParamProcPrivateClass(query, privateClassDto, userDetails.getId());
             query.execute();
+            MessageResponse.message = "Thêm lớp thành công";
         }
     }
 
     @Override
-    public PageData<PrivateClassDto> getAllPrivateClass(Pageable pageable) {
-        List<PrivateClass> privateClassList = privateClassRepository.selectPrivateClass();
+    public PageData<PrivateClassDto> getAllPrivateClass(Pageable pageable, String search) {
+        List<PrivateClass> privateClassList = privateClassRepository.selectPrivateClass(search);
         privateClassList.sort(new MyListComparator(pageable));
 
         PagedListHolder<PrivateClass> privateClassPage = new PagedListHolder<>(privateClassList);
@@ -77,14 +79,14 @@ public class PrivateClassDaoImpl implements PrivateClassDao {
         query.setParameter("name", privateClassDto.getName());
         query.setParameter("description", privateClassDto.getDescription());
         query.setParameter("number_sessions", privateClassDto.getNumber_sessions());
-        query.setParameter("id_coach", privateClassDto.getCoach().getId());
+        query.setParameter("id_coach", privateClassDto.getCoach());
 
         if (privateClassDto.getId() == null) {
             query.registerStoredProcedureParameter("created_by", String.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("id_customer", String.class, ParameterMode.IN);
             query.setParameter("id", UUID.randomUUID().toString());
             query.setParameter("created_by", id_user);
-            query.setParameter("id_customer", privateClassDto.getCustomer().getId());
+            query.setParameter("id_customer", privateClassDto.getCustomer());
         } else {
             query.registerStoredProcedureParameter("remaining_sessions", Integer.class, ParameterMode.IN);
             query.setParameter("id", privateClassDto.getId());
@@ -99,8 +101,8 @@ public class PrivateClassDaoImpl implements PrivateClassDao {
                 .number_sessions(privateClass.getNumber_sessions())
                 .remaining_sessions(privateClass.getRemaining_sessions())
                 .created_time(privateClass.getCreated_time())
-                .customer(privateClass.getCustomer())
-                .coach(privateClass.getCoach())
+                .customer(privateClass.getCustomer().getId())
+                .coach(privateClass.getCoach().getId())
                 .build();
     }
 }
