@@ -1,7 +1,5 @@
 package com.springboot.telegym;
 
-import com.springboot.telegym.dto.enums.PermissionEnum;
-import com.springboot.telegym.entity.Permission;
 import com.springboot.telegym.entity.User;
 import com.springboot.telegym.repository.PermissionRepository;
 import com.springboot.telegym.repository.RoleRepository;
@@ -13,7 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Optional;
 
 @SpringBootApplication
 public class TelegymApplication {
@@ -53,38 +52,38 @@ public class TelegymApplication {
             return null;
     }
 
-    @Bean
-    InitializingBean initializeDataInPermission() {
-        List<Object> listTable = permissionRepository.listTableInDB();
-        int countData = permissionRepository.countDataPermission();
-        int sizeNeedCheck = listTable.size()*4;
-        List<Permission> permissionList = new ArrayList<>();
-        if (sizeNeedCheck < countData) {
-            for (Object data : listTable) {
-                for (PermissionEnum a : PermissionEnum.values()) {
-                    permissionList.add(new Permission(UUID.randomUUID().toString(), (String) data, a.toString(), new Date(), new Date()));
-                }
-            }
-            return () -> {
-                permissionRepository.saveAll(permissionList);
-            };
-        }
-        else if (sizeNeedCheck > countData) {
-            List<Object> tableInPermission = permissionRepository.findingName();
-            for (Object data : listTable) {
-                if (!tableInPermission.contains(data)) {
-                    for (PermissionEnum a : PermissionEnum.values()) {
-                        permissionList.add(new Permission(UUID.randomUUID().toString(), (String) data, a.toString(), new Date(), new Date()));
-                    }
-                }
-            }
-            return () -> {
-                permissionRepository.saveAll(permissionList);
-            };
-        }
-        else
-            return null;
-    }
+//    @Bean
+//    InitializingBean initializeDataInPermission() {
+//        List<Object> listTable = permissionRepository.listTableInDB();
+//        int countData = permissionRepository.countDataPermission();
+//        int sizeNeedCheck = listTable.size()*4;
+//        List<Permission> permissionList = new ArrayList<>();
+//        if (sizeNeedCheck < countData) {
+//            for (Object data : listTable) {
+//                for (PermissionEnum a : PermissionEnum.values()) {
+//                    permissionList.add(new Permission(UUID.randomUUID().toString(), (String) data, a.toString(), new Date(), new Date()));
+//                }
+//            }
+//            return () -> {
+//                permissionRepository.saveAll(permissionList);
+//            };
+//        }
+//        else if (sizeNeedCheck > countData) {
+//            List<Object> tableInPermission = permissionRepository.findingName();
+//            for (Object data : listTable) {
+//                if (!tableInPermission.contains(data)) {
+//                    for (PermissionEnum a : PermissionEnum.values()) {
+//                        permissionList.add(new Permission(UUID.randomUUID().toString(), (String) data, a.toString(), new Date(), new Date()));
+//                    }
+//                }
+//            }
+//            return () -> {
+//                permissionRepository.saveAll(permissionList);
+//            };
+//        }
+//        else
+//            return null;
+//    }
 
 //    @Bean
 //    public JavaMailSender getJavaMailSender() {

@@ -89,6 +89,8 @@ CREATE TABLE Coach
     description   nvarchar(1000),
     created_time  SMALLDATETIME not null,
     created_by    varchar(36),
+    is_deleted    bit,
+    rating        real,
     updated_time  SMALLDATETIME not null,
     updated_by    varchar(36),
 );
@@ -179,9 +181,9 @@ CREATE TABLE AccessManagement
     is_checkout   bit,
     id_class      varchar(36),
     id_customer   varchar(36),
-    updated_time smalldatetime
-    CONSTRAINT fk_class_access foreign key (id_class) references GeneralClass (id)
-        ON DELETE CASCADE,
+    updated_time  smalldatetime
+        CONSTRAINT fk_class_access foreign key (id_class) references GeneralClass (id)
+            ON DELETE CASCADE,
     CONSTRAINT fk_customer_access foreign key (id_customer) references Customer (id)
         ON DELETE CASCADE,
 )
