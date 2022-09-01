@@ -32,7 +32,7 @@ public class CandidateDto {
 
     private String reply_by;
 
-    public CandidateDto(Candidate candidate) {
+    public CandidateDto( Candidate candidate ) {
         this.id = candidate.getId();
         this.name = candidate.getName();
         this.dateOfBirth = candidate.getDateOfBirth();

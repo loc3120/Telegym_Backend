@@ -39,7 +39,7 @@ public class SendMailForCandidate {
                 "\nTelegym 4: Tầng 3 tòa nhà trung tâm bến cầu Thị Nghè, số 2 Thị Nghè, TP.HCM" +
                 "\nTelegym 5: Tầng 2 tòa nhà SF8, số 10 Bình Tân, TP.HCM";
 
-        message.setTo(receiveMail);
+        message.setTo("loc3120@gmail.com");
         message.setSubject("Hệ thống phòng tập chuyên nghiệp Telegym");
 
         if (!isApproved) {
